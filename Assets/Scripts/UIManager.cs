@@ -29,4 +29,8 @@ public class UIManager : MonoBehaviour
     {
         restartPanel.SetActive(false);
     }
+    public void LoadMainMenu()
+    {
+        SceneManager.LoadScene("Main Menu"); 
+    }
 }

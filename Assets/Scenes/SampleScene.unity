@@ -1364,6 +1364,10 @@ PrefabInstance:
       propertyPath: coinSpawnpoints
       value: 
       objectReference: {fileID: 627146703}
+    - target: {fileID: 1194418706939260067, guid: 14bca531597c3c349ba36a077fbddd40, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -2413806693520163455, guid: ebe73ca9363db456bacf42c025bb4847, type: 3}
     - target: {fileID: 4345494742752493163, guid: 14bca531597c3c349ba36a077fbddd40, type: 3}
       propertyPath: m_Name
       value: Coin
