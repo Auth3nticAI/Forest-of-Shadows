@@ -6,45 +6,62 @@ using UnityEngine.SceneManagement; // Import the SceneManagement namespace to ha
 public class EnemyAI : MonoBehaviour
 {
     public Transform player; // Reference to the player's position
-    public float speed = 2f; // Speed of the enemy
-    public float separationDistance = 1f; // Minimum distance between enemies
+    public float speed = 3f; // Speed of the enemy
+    private bool isPaused = false;
+    private float elapsedTime = 0f;
+    public int pauseDuration = 2;
 
     private Rigidbody2D rb;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        elapsedTime = 0;
     }
 
     void FixedUpdate()
     {
-        Vector2 direction = (player.position - transform.position).normalized;
-
-        // Apply separation behavior
-        Vector2 separation = Vector2.zero;
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, separationDistance);
-        foreach (Collider2D collider in colliders)
+        if (isPaused)
         {
-            if (collider != GetComponent<Collider2D>() && collider.CompareTag("Enemy"))
+            if (elapsedTime >= pauseDuration)
             {
-                Vector2 difference = transform.position - collider.transform.position;
-                separation += difference.normalized / difference.magnitude;
+                elapsedTime = 0;
+                isPaused = false;
             }
+            elapsedTime += Time.deltaTime;
         }
-
-        Vector2 moveDirection = direction + separation;
-        rb.velocity = moveDirection.normalized * speed;
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("Player"))
+        else
         {
-            Debug.Log("Player caught!");
-            RestartLevel();
+            Vector2 direction = (player.position - transform.position).normalized;
+
+            Vector2 moveDirection = direction;
+            rb.velocity = moveDirection.normalized * speed;
+
+            // Chance to pause and wait:
+            if (elapsedTime >= 0.1)
+            {
+                if (Random.Range(0, 100) == 1)
+                {
+                    isPaused = true;
+                    elapsedTime = 0;
+                }
+            }
+            elapsedTime += Time.deltaTime;
         }
     }
 
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("Player"))
+        {
+            GameOver();
+        }
+    }
+    void GameOver()
+    {
+        Debug.Log("Game Over!");
+        RestartLevel();
+    }
     void RestartLevel()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
