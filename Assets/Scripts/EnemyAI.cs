@@ -7,29 +7,28 @@ public class EnemyAI : MonoBehaviour
 {
     public Transform player; // Reference to the player's position
     public float speed = 3f; // Speed of the enemy
-    private int frame = 0;
     private bool isPaused = false;
-    public int pauseDuration = 120;
+    private float elapsedTime = 0f;
+    public int pauseDuration = 2;
 
     private Rigidbody2D rb;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        frame = 0;
+        elapsedTime = 0;
     }
 
     void FixedUpdate()
     {
-        if (frame >= pauseDuration)
-        {
-            frame = 0;
-            isPaused = false;
-        }
-        frame++;
         if (isPaused)
         {
-            // LOSE CURRENT PLAYER POSITION
+            if (elapsedTime >= pauseDuration)
+            {
+                elapsedTime = 0;
+                isPaused = false;
+            }
+            elapsedTime += Time.deltaTime;
         }
         else
         {
@@ -39,11 +38,15 @@ public class EnemyAI : MonoBehaviour
             rb.velocity = moveDirection.normalized * speed;
 
             // Chance to pause and wait:
-            if (Random.Range(0, 2 * 60) == frame) // happen every 2 seconds on avg (2 * 60 frames)
+            if (elapsedTime >= 0.1)
             {
-                isPaused = true;
-                frame = 0;
+                if (Random.Range(0, 100) == 1)
+                {
+                    isPaused = true;
+                    elapsedTime = 0;
+                }
             }
+            elapsedTime += Time.deltaTime;
         }
     }
 
