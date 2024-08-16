@@ -30,25 +30,13 @@ public class EnemyAI : MonoBehaviour
         frame++;
         if (isPaused)
         {
-            // Do nothing! WAIT
+            // LOSE CURRENT PLAYER POSITION
         }
         else
         {
             Vector2 direction = (player.position - transform.position).normalized;
 
-            // Apply separation behavior
-            Vector2 separation = Vector2.zero;
-            Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, separationDistance);
-            foreach (Collider2D collider in colliders)
-            {
-                if (collider != GetComponent<Collider2D>() && collider.CompareTag("Enemy"))
-                {
-                    Vector2 difference = transform.position - collider.transform.position;
-                    separation += difference.normalized / difference.magnitude;
-                }
-            }
-
-            Vector2 moveDirection = direction + separation;
+            Vector2 moveDirection = direction;
             rb.velocity = moveDirection.normalized * speed;
 
             // Chance to pause and wait:
@@ -60,15 +48,18 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        if (other.gameObject.CompareTag("Player"))
         {
-            Debug.Log("Player caught!");
-            RestartLevel();
+            GameOver();
         }
     }
-
+    void GameOver()
+    {
+        Debug.Log("Game Over!");
+        RestartLevel();
+    }
     void RestartLevel()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
