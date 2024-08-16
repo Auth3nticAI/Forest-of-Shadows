@@ -6,8 +6,8 @@ public class EnemySpawner : MonoBehaviour
 {
     public GameObject enemyPrefab;  // The enemy prefab to spawn
     public Transform player;  // Reference to the player's position
-    public int enemyCount = 5;  // Number of enemies to spawn
-    public float spawnRadius = 10f;  // Radius within which enemies will be spawned
+    public int enemyCount = 8;  // Number of enemies to spawn
+    public float spawnRadius = 50f;  // Radius within which enemies will be spawned
 
     void Start()
     {

@@ -6,8 +6,7 @@ using UnityEngine.SceneManagement; // Import the SceneManagement namespace to ha
 public class EnemyAI : MonoBehaviour
 {
     public Transform player; // Reference to the player's position
-    public float speed = 2f; // Speed of the enemy
-    public float separationDistance = 1f; // Minimum distance between enemies
+    public float speed = 3f; // Speed of the enemy
     private int frame = 0;
     private bool isPaused = false;
     public int pauseDuration = 120;
